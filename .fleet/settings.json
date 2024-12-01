@@ -1,0 +1,9 @@
+{
+  "toolchains": [],
+  "plugins": [
+    {
+      "type": "add",
+      "pluginName": "fleet.kotlin"
+    }
+  ]
+}
