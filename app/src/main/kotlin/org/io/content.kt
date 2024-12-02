@@ -1,5 +1,6 @@
 package org.io
 
+import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -23,9 +24,14 @@ class Content(private val day: Int) {
   fun load(part: Int, sample: Boolean): String {
     val sampleSuffix = if (sample) "_sample" else ""
 
-    val filePath =
-      Paths.get(javaClass.classLoader.getResource("inputs/day${day}/part_${part}${sampleSuffix}.txt")!!.toURI())
-    return Files.readString(filePath)
+    val inputStream = javaClass.classLoader.getResourceAsStream("inputs/day${day}/part_${part}${sampleSuffix}.txt")
+    if (inputStream != null) {
+      val content = inputStream.bufferedReader().use { it.readText() }
+      return content;
+    } else {
+      println("Resource not found")
+      throw (FileNotFoundException("inputs/day${day}/part_${part}${sampleSuffix}.txt"))
+    }
   }
 }
 

@@ -8,3 +8,4 @@ build
 .kotlin/errors
 
 app/src/test/resources/inputs
+app/src/main/resources/inputs

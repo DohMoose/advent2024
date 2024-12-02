@@ -3,13 +3,34 @@
  */
 package org.example
 
+import org.days.two.Day
+import org.io.Content
+import kotlin.time.measureTime
+
 class App {
-    val greeting: String
-        get() {
-            return "Hello World!"
-        }
+  val greeting: String
+    get() {
+      return "Hello World!"
+    }
 }
 
 fun main() {
-    println(App().greeting)
+  val content = Content(2).load_part_one()
+  
+  val timeTaken_1 = measureTime {
+    println(
+      "Part 1: ${
+        Day().partOne(content)
+      }"
+    )
+  }
+  println("Time taken: $timeTaken_1")
+  val timeTaken_2 = measureTime {
+    println(
+      "Part 2: ${
+        Day().partTwo(content)
+      }"
+    )
+  }
+  println("Time taken: $timeTaken_2")
 }
