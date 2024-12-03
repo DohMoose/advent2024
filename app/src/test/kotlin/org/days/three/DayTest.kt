@@ -17,7 +17,7 @@ class DayTest {
     val fileContent = content.load_part_one_sample()
 
     val classUnderTest = classUnderTest()
-    assertEquals("2", classUnderTest.partOne(fileContent))
+    assertEquals("161", classUnderTest.partOne(fileContent))
   }
 
   @Test
@@ -37,7 +37,7 @@ class DayTest {
     val fileContent = content.load_part_two_sample()
 
     val classUnderTest = classUnderTest()
-    assertEquals("4", classUnderTest.partTwo(fileContent))
+    assertEquals("48", classUnderTest.partTwo(fileContent))
   }
 
   @Test
