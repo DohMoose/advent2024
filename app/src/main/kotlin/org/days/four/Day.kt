@@ -8,7 +8,7 @@ class Day : IDay {
     var count = 0
     for (y in grid.indices) {
       for (x in grid[0].indices) {
-        count += (search(grid, x, y))
+        count += (countXmases(grid, x, y))
       }
     }
 
@@ -62,7 +62,7 @@ class Day : IDay {
 
   val letters = "XMAS".toList()
 
-  fun search(grid: List<List<Char>>, x: Int, y: Int): Int {
+  fun countXmases(grid: List<List<Char>>, x: Int, y: Int): Int {
     if (grid[y][x] != 'X') {
       return 0
     }
