@@ -15,7 +15,7 @@ class App {
 }
 
 fun main() {
-  val content = Content(2).load_part_one()
+  val content = Content(2).loadPartOne()
   
   val timeTaken_1 = measureTime {
     println(

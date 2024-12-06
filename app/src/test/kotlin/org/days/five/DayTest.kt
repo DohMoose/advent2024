@@ -10,14 +10,14 @@ class DayTest {
 
   @Test
   fun doesPartOneSample() {
-    val fileContent = content.load_part_one_sample()
+    val fileContent = content.loadPartOneSample()
 
     assertEquals("143", Day().partOne(fileContent))
   }
 
   @Test
   fun doesPartOne() {
-    val fileContent = content.load_part_one()
+    val fileContent = content.loadPartOne()
 
     assertDoesNotThrow {
       val result = Day().partOne(fileContent)
@@ -27,14 +27,14 @@ class DayTest {
 
   @Test
   fun doesPartTwoSample() {
-    val fileContent = content.load_part_two_sample()
+    val fileContent = content.loadPartTwoSample()
 
     assertEquals("123", Day().partTwo(fileContent))
   }
 
   @Test
   fun doesPartTwo() {
-    val fileContent = content.load_part_one()
+    val fileContent = content.loadPartOne()
 
     assertDoesNotThrow {
       val result = Day().partTwo(fileContent)

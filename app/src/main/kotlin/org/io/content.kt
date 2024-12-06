@@ -27,7 +27,7 @@ class Content(private val day: Int) {
     val inputStream = javaClass.classLoader.getResourceAsStream("inputs/day${day}/part_${part}${sampleSuffix}.txt")
     if (inputStream != null) {
       val content = inputStream.bufferedReader().use { it.readText() }
-      return content;
+      return content.trimEnd()
     } else {
       println("Resource not found")
       throw (FileNotFoundException("inputs/day${day}/part_${part}${sampleSuffix}.txt"))
