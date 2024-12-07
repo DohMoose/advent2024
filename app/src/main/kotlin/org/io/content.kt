@@ -5,19 +5,19 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 class Content(private val day: Int) {
-  fun load_part_one(): String {
+  fun loadPartOne(): String {
     return load(1, false)
   }
 
-  fun load_part_one_sample(): String {
+  fun loadPartOneSample(): String {
     return load(1, true)
   }
 
-  fun load_part_two(): String {
+  fun loadPartTwo(): String {
     return load(2, false)
   }
 
-  fun load_part_two_sample(): String {
+  fun loadPartTwoSample(): String {
     return load(2, true)
   }
 
