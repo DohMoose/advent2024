@@ -12,7 +12,7 @@ class DayTest {
   fun doesPartOneSample() {
     val fileContent = content.loadPartOneSample()
 
-    assertEquals("143", Day().partOne(fileContent))
+    assertEquals("41", Day().partOne(fileContent))
   }
 
   @Test
@@ -29,7 +29,7 @@ class DayTest {
   fun doesPartTwoSample() {
     val fileContent = content.loadPartTwoSample()
 
-    assertEquals("123", Day().partTwo(fileContent))
+    assertEquals("6", Day().partTwo(fileContent))
   }
 
   @Test
