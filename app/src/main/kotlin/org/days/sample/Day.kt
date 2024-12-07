@@ -9,7 +9,7 @@ import org.days.IDay
 
 class Day : IDay {
   override fun partOne(input: String): String {
-    val result = OneGrammar().parseToEnd(input)
+    val result = DayGrammar().parseToEnd(input)
 
     return result
       .map { it.filterIsInstance<Number>() }
@@ -29,7 +29,7 @@ class Day : IDay {
   class Number(val value: Int) : Item
   class Variable(val name: String) : Item
 
-  class OneGrammar : Grammar<List<List<Item>>>() {
+  class DayGrammar : Grammar<List<List<Item>>>() {
     val num by regexToken("\\d+")
     val word by regexToken("[A-Za-z]+")
     val newLine by regexToken("\\n")
