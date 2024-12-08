@@ -26,7 +26,7 @@ class Day : IDay {
         rules[first]?.contains(second) ?: false
       }
     }.map {
-      it.sortedWith(Comparator { first, second ->
+      it.sortedWith({ first, second ->
         when {
           rules[first]?.contains(second) == true -> -1
           first == second -> 0
