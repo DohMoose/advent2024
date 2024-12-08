@@ -4,6 +4,24 @@ import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.nio.file.Paths
 
+data class Position(val x: Int, val y: Int) {
+  fun inGrid(bottomRight: Position): Boolean {
+    return x >= 0 && y >= 0 && x <= bottomRight.x && y <= bottomRight.y
+  }
+
+  operator fun plus(other: Position): Position {
+    return Position(this.x + other.x, this.y + other.y)
+  }
+
+  operator fun minus(other: Position): Position {
+    return Position(this.x - other.x, this.y - other.y)
+  }
+
+  operator fun times(scalar: Int): Position {
+    return Position(this.x * scalar, this.y * scalar)
+  }
+}
+
 class Content(private val day: Int) {
   fun loadPartOne(): String {
     return load(1, false)
