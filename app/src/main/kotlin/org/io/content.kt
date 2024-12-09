@@ -23,6 +23,17 @@ data class Position(val x: Int, val y: Int) {
 }
 
 class Content(private val day: Int) {
+
+  companion object {
+    @JvmStatic
+    fun autoInit(): Content {
+      val callingClassName = Thread.currentThread().stackTrace[2].className
+      val callingPackageName = Class.forName(callingClassName).`package`?.name
+      val day = callingPackageName!!.substringAfterLast('.').removePrefix("day")
+      return Content(day.toInt())
+    }
+  }
+
   fun loadPartOne(): String {
     return load(1, false)
   }

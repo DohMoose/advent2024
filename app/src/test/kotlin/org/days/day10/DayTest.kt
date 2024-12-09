@@ -1,4 +1,4 @@
-package org.days.day9
+package org.days.day10
 
 import org.io.Content
 import org.junit.jupiter.api.assertDoesNotThrow
