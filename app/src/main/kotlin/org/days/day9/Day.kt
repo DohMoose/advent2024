@@ -3,7 +3,6 @@ package org.days.day9
 import com.github.h0tk3y.betterParse.combinators.*
 import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
-import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import org.days.IDay
 
@@ -145,24 +144,10 @@ class Day : IDay {
     return Pair(evenIndexedItems, oddIndexedItems)
   }
 
-  interface Item
-  class Dot : Item
-  class Variable(val name: String) : Item
-
-
   class DayGrammar : Grammar<List<Int>>() {
     val digit by regexToken("\\d")
 
-    val letter by regexToken("[A-Za-z]")
-
-    val dot by literalToken(".")
-    val hash by literalToken("#")
-    val newLine by regexToken("\\n")
-
     val number by digit use { text.toInt() }
-
-    val varParser by (digit or letter) use { Variable(text) }
-    val dotParser by (dot or hash) use { Dot() }
 
     val lineParser by oneOrMore(number)
     override val rootParser by lineParser
