@@ -10,27 +10,27 @@ class Day : IDay {
   override fun partOne(input: String): String {
     val raw = DayGrammar().parseToEnd(input)
     val (files, freeSpaces) = raw.splitByIndex()
-    val bigList = bigOlList(files, freeSpaces).toMutableList()
+    val blocks = toBlocks(files, freeSpaces).toMutableList()
 
     var left = 0
-    var right = bigList.count() - 1
+    var right = blocks.count() - 1
 
     while (right > left) {
-      while (bigList[left] != null && right > left) {
+      while (blocks[left] != null && right > left) {
         left += 1
       }
-      while (bigList[right] != null && bigList[left] == null && right > left) {
-        bigList[left] = bigList[right]
-        bigList[right] = null
+      while (blocks[right] != null && blocks[left] == null && right > left) {
+        blocks[left] = blocks[right]
+        blocks[right] = null
         right -= 1
         left += 1
       }
-      while (bigList[right] == null) {
+      while (blocks[right] == null) {
         right -= 1
       }
     }
 
-    val result = bigList.filterNotNull().mapIndexed { index, value ->
+    val result = blocks.filterNotNull().mapIndexed { index, value ->
       index.toLong() * value.toLong()
     }.sum()
     return result.toString()
@@ -45,7 +45,7 @@ class Day : IDay {
     }
   }
 
-  fun bigOlList(files: List<Int>, freeSpaces: List<Int>): List<Int?> {
+  fun toBlocks(files: List<Int>, freeSpaces: List<Int>): List<Int?> {
     val filesLength = files.count()
     val freeSpacesLength = freeSpaces.count()
     val zipped = files.zip(freeSpaces).flatMapIndexed { index, (file, freeSpace) ->
@@ -79,18 +79,18 @@ class Day : IDay {
   override fun partTwo(input: String): String {
     val raw = DayGrammar().parseToEnd(input)
     val (files, freeSpaces) = raw.splitByIndex()
-    val bigList = bigOlList(files, freeSpaces).toMutableList()
+    val blocks = toBlocks(files, freeSpaces).toMutableList()
 
-    var right = bigList.count() - 1
+    var right = blocks.count() - 1
 
-    for (file in reversedFiles(bigList)) {
+    for (file in reversedFiles(blocks)) {
       right -= file.count()
       if (file[0] != null) {
-        moveFile(right, bigList, file)
+        moveFile(right, blocks, file)
       }
     }
 
-    val result = bigList.mapIndexed { index, value ->
+    val result = blocks.mapIndexed { index, value ->
       if (value == null) {
         0
       } else {
