@@ -5,151 +5,103 @@ import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import org.days.IDay
+import org.io.Position
 
 class Day : IDay {
   override fun partOne(input: String): String {
-    val raw = DayGrammar().parseToEnd(input)
-    val (files, freeSpaces) = raw.splitByIndex()
-    val blocks = toBlocks(files, freeSpaces).toMutableList()
+    val locations = toLocations(DayGrammar().parseToEnd(input))
+    val trailHeads = trailHeads(locations)
+    return trailHeads.sumOf {
+      val set: MutableSet<Position> = mutableSetOf()
+      explore(it, locations, set)
+      set.count()
 
-    var left = 0
-    var right = blocks.count() - 1
-
-    while (right > left) {
-      while (blocks[left] != null && right > left) {
-        left += 1
-      }
-      while (blocks[right] != null && blocks[left] == null && right > left) {
-        blocks[left] = blocks[right]
-        blocks[right] = null
-        right -= 1
-        left += 1
-      }
-      while (blocks[right] == null) {
-        right -= 1
-      }
-    }
-
-    val result = blocks.filterNotNull().mapIndexed { index, value ->
-      index.toLong() * value.toLong()
-    }.sum()
-    return result.toString()
-  }
-
-  fun formatBigList(list: List<Int?>): String {
-    return list.joinToString("-") {
-      when (it) {
-        null -> "."
-        else -> it.toString()
-      }
-    }
-  }
-
-  fun toBlocks(files: List<Int>, freeSpaces: List<Int>): List<Int?> {
-    val filesLength = files.count()
-    val freeSpacesLength = freeSpaces.count()
-    val zipped = files.zip(freeSpaces).flatMapIndexed { index, (file, freeSpace) ->
-      List(file) { index } + List(freeSpace) { null }
-    }
-    return if (filesLength > freeSpacesLength) {
-      zipped + List(files.last()) { filesLength - 1 }
-    } else {
-      zipped
-    }
-  }
-
-  fun reversedFiles(files: List<Int?>): Sequence<List<Int?>> = sequence {
-    val rFiles = files.reversed()
-    var cur = rFiles[0]
-    var curList = mutableListOf(cur)
-    var index = 1
-    while (index < rFiles.count()) {
-      if (rFiles[index] == cur) {
-        curList.add(cur)
-      } else {
-        yield(curList)
-        cur = rFiles[index]
-        curList = mutableListOf(cur)
-      }
-      index += 1
-    }
-    yield(curList)
+    }.toString()
   }
 
   override fun partTwo(input: String): String {
-    val raw = DayGrammar().parseToEnd(input)
-    val (files, freeSpaces) = raw.splitByIndex()
-    val blocks = toBlocks(files, freeSpaces).toMutableList()
+    // each grid item will have height and elevation change in each direction
+    val locations = toLocations(DayGrammar().parseToEnd(input))
+    val trailHeads = trailHeads(locations)
+    return trailHeads.sumOf {
+      explore2(it, locations)
+    }.toString()
+  }
 
-    var right = blocks.count() - 1
+  fun explore2(
+    current: Location,
+    locations: List<List<Location>>,
+  ): Int {
+    if (current.height == 9)
+      return 1
 
-    for (file in reversedFiles(blocks)) {
-      right -= file.count()
-      if (file[0] != null) {
-        moveFile(right, blocks, file)
-      }
-    }
-
-    val result = blocks.mapIndexed { index, value ->
-      if (value == null) {
-        0
+    return current.elevations.mapIndexed { index, elevation ->
+      if (elevation == 1) {
+        val nextPos = (current.position + directions[index])
+        //  if (!previousLocations.contains(nextPos)) {
+        explore2(locations[nextPos.y][nextPos.x], locations)
+        // }
       } else {
-        index.toLong() * value.toLong()
+        0
       }
     }.sum()
-    return result.toString()
   }
 
-  private fun moveFile(
-    right: Int,
-    bigList: MutableList<Int?>,
-    item: List<Int?>
+  fun explore(
+    current: Location,
+    locations: List<List<Location>>,
+    summits: MutableSet<Position>
   ) {
-    var left = 0
-    // look from the left but stop if we reach our file
-    while (right >= left) {
-      // skip over already defragged blocks
-      while (bigList[left] != null && right >= left) {
-        left += 1
-      }
-      var space = 0
-      // now look empty blocks
-      while (bigList[left] == null && right >= left) {
-        left += 1
-        space += 1
-        // we found a space big enough, move the file
-        if (space == item.count()) {
-          for (i in item.indices) {
-            bigList[left - space + i] = item[i]
-            bigList[right + 1 + i] = null
-          }
-          return
-        }
+    if (current.height == 9)
+      summits.add(current.position)
+
+    current.elevations.forEachIndexed { index, elevation ->
+      if (elevation == 1) {
+        val nextPos = (current.position + directions[index])
+        explore(locations[nextPos.y][nextPos.x], locations, summits)
       }
     }
   }
 
-  fun <T> List<T>.splitByIndex(): Pair<List<T>, List<T>> {
-    val evenIndexedItems = mutableListOf<T>()
-    val oddIndexedItems = mutableListOf<T>()
-
-    for (i in this.indices) {
-      if (i % 2 == 0) {
-        evenIndexedItems.add(this[i])
-      } else {
-        oddIndexedItems.add(this[i])
-      }
+  fun trailHeads(locations: List<List<Location>>): List<Location> {
+    return locations.flatMap { row ->
+      row.filter { location -> location.height == 0 }
     }
-
-    return Pair(evenIndexedItems, oddIndexedItems)
   }
 
-  class DayGrammar : Grammar<List<Int>>() {
+  fun toLocations(raw: List<List<Int>>): List<List<Location>> {
+    return raw.mapIndexed { y, row ->
+      row.mapIndexed { x, height ->
+        Location(raw[y][x], Position(x, y), directions.map { dir ->
+          if (isIndexInRange(raw, x + dir.x, y + dir.y))
+            raw[y + dir.y][x + dir.x] - raw[y][x]
+          else
+            null
+        })
+      }
+    }
+  }
+
+  val directions = listOf(
+    Position(0, 1),   // Up
+    Position(0, -1),  // Down
+    Position(-1, 0),  // Left
+    Position(1, 0),   // Right
+  )
+
+  fun <T> isIndexInRange(grid: List<List<T>>, x: Int, y: Int): Boolean {
+    return y in grid.indices && x in grid[y].indices
+  }
+
+  data class Location(val height: Int, val position: Position, val elevations: List<Int?>)
+
+  class DayGrammar : Grammar<List<List<Int>>>() {
     val digit by regexToken("\\d")
+    val newLine by regexToken("\\n")
 
     val number by digit use { text.toInt() }
 
     val lineParser by oneOrMore(number)
-    override val rootParser by lineParser
+    override val rootParser by separatedTerms(lineParser, newLine)
   }
 }
