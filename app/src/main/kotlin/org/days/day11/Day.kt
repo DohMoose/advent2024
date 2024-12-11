@@ -1,12 +1,12 @@
 package org.days.day11
 
-import com.github.h0tk3y.betterParse.combinators.*
+import com.github.h0tk3y.betterParse.combinators.separatedTerms
+import com.github.h0tk3y.betterParse.combinators.use
 import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import org.days.IDay
-import org.io.Position
 
 class Day : IDay {
   override fun partOne(input: String): String {
@@ -14,7 +14,7 @@ class Day : IDay {
     for (i in 1..25) {
       stones = nextGenSimple(stones).toList()
     }
-    return stones.count().toString();
+    return stones.count().toString()
   }
 
   fun nextGenSimple(input: List<Long>): Sequence<Long> = sequence {
@@ -37,10 +37,9 @@ class Day : IDay {
       DayGrammar().parseToEnd(input).associateWith { 1.toLong() }
 
     for (i in 1..75) {
-
       stones = nextGenEfficient(stones)
-      println(i.toString() + "=" + stones.values.sum())
     }
+
     return stones.values.sum().toString()
   }
 
@@ -76,7 +75,6 @@ class Day : IDay {
   class DayGrammar : Grammar<List<Long>>() {
     val digit by regexToken("\\d+")
     val spacer by literalToken(" ")
-
     val numParser by digit use { text.toLong() }
     override val rootParser by separatedTerms(numParser, spacer)
   }
