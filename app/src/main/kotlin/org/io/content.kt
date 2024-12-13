@@ -20,6 +20,15 @@ data class Position(val x: Int, val y: Int) {
   operator fun times(scalar: Int): Position {
     return Position(this.x * scalar, this.y * scalar)
   }
+
+  operator fun div(scalar: Int): Position {
+    return Position(this.x / scalar, this.y / scalar)
+  }
+
+
+  fun <T> get(grid: List<List<T>>): T {
+    return grid[y][x]
+  }
 }
 
 class Content(private val day: Int) {
