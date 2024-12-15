@@ -24,36 +24,11 @@ class Day : IDay {
         r.first * 3 + r.second
       }
     }.toString()
-    //return findCheapest(94, 34, 22, 67, 8400, 5400).toString()
   }
 
   fun findCheapest(cm: ClawMachine, adder: Long): Pair<Long, Long>? {
-    // it's a algebra
-
-    //  Button A: X+94, Y+34
-    //  Button B: X+22, Y+67
-    //  Prize: X=8400, Y=5400
-
-
-    // 94a = 8400 - 22b
-    // 34a = 5400 - 67b
-    // 22b = 8400 - 94a
-    // 67b = 5400 - 34a
-    // b =  8400 - 94a / 22
-    // b = 5400 - 34a / 67
-
-    //  (totalX - aX * a) / bX = (totalY - aY * a) / bY
-    // totalX * bY - totalY * bX = bY * aX * a - bX * aY * a
-    // totalX * bY - totalY * bX / (bY * aX) - (bX * aY)
-
-
-    // (285600 - 748b) = 507600 - 6298b
-    //  6298b - 748b   = 507600 - 285600
-    // 5550b = 222000
-
     val totalX = cm.totalX + adder
     val totalY = cm.totalY + adder
-
 
     val (a, aRemainder) = divideWithRemainder(totalX * cm.bY - totalY * cm.bX, (cm.bY * cm.aX - cm.bX * cm.aY))
     if (aRemainder != 0.toLong()) {
@@ -64,25 +39,6 @@ class Day : IDay {
       return null
     }
     return Pair(a, b)
-
-
-//
-//            for (a in 1.toLong() until 100) {
-//              if (a * cm.aX > totalX || a * cm.aY > totalY) {
-//                break
-//              }
-//              for (b in 0.toLong() until 100) {
-//                val currentX = (a * cm.aX + b * cm.bX)
-//                val currentY = (a * cm.aY + b * cm.bY)
-//                if (currentX > totalX || currentY > totalY) {
-//                  break
-//                }
-//                if (currentX == totalX && currentY == totalY) {
-//                  return Pair(a, b)
-//                }
-//              }
-//            }
-//    return null
   }
 
   fun divideWithRemainder(dividend: Long, divisor: Long): Pair<Long, Long> {
@@ -91,25 +47,8 @@ class Day : IDay {
     return Pair(quotient, remainder)
   }
 
-  fun gcd(a: Long, b: Long): Long {
-    return if (b == 0.toLong()) a else gcd(b, a % b)
-  }
-
-  fun gcd(vararg numbers: Long): Long {
-    return numbers.reduce { acc, number -> gcd(acc, number) }
-  }
-
   override fun partTwo(input: String): String {
-    // it's a algebra
 
-    //    Button A: X+69, Y+23
-    //    Button B: X+27, Y+71
-    //    Prize: X=18641, Y=10279
-    // 94a + 22b = 8400
-    // 34a + 67b = 5400
-    // solve for smallest a
-    // 128a + 89b =
-    // 23a - 22b = 4181
     val clawMachines = DayGrammar().parseToEnd(input)
     return clawMachines.sumOf {
 
@@ -120,8 +59,6 @@ class Day : IDay {
         r.first * 3 + r.second
       }
     }.toString()
-
-    return input
   }
 
   data class ClawMachine(val aX: Long, val aY: Long, val bX: Long, val bY: Long, val totalX: Long, val totalY: Long)
