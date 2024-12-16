@@ -4,6 +4,13 @@ import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.nio.file.Paths
 
+val directions = listOf(
+  Position(0, -1),   // Up
+  Position(1, 0),   // Right
+  Position(0, 1),  // Down
+  Position(-1, 0),  // Left
+)
+
 data class Position(val x: Int, val y: Int) {
   fun inGrid(bottomRight: Position): Boolean {
     return x >= 0 && y >= 0 && x <= bottomRight.x && y <= bottomRight.y
