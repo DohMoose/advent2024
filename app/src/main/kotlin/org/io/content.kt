@@ -3,6 +3,7 @@ package org.io
 import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.nio.file.Paths
+import kotlin.math.absoluteValue
 
 val directions = listOf(
   Position(0, -1),   // Up
@@ -10,10 +11,23 @@ val directions = listOf(
   Position(0, 1),  // Down
   Position(-1, 0),  // Left
 )
+val northIndex = 0
+val eastIndex = 1
+val southIndex = 2
+val westIndex = 3
+val directionIndexes = listOf(northIndex, eastIndex, southIndex, westIndex)
 
 data class Position(val x: Int, val y: Int) {
   fun inGrid(bottomRight: Position): Boolean {
     return x >= 0 && y >= 0 && x <= bottomRight.x && y <= bottomRight.y
+  }
+
+  fun <T> inGrid(grid: List<List<T>>): Boolean {
+    return inGrid(Position(grid[0].indices.count(), grid.indices.count()))
+  }
+
+  fun euclideanDistance(other: Position): Int {
+    return (x - other.x).absoluteValue + (y - other.y).absoluteValue
   }
 
   operator fun plus(other: Position): Position {
