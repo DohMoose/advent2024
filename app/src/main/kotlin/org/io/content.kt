@@ -5,6 +5,8 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.math.absoluteValue
 
+typealias Grid<T> = List<List<T>>
+
 val directions = listOf(
   Position(0, -1),   // Up
   Position(1, 0),   // Right
@@ -22,8 +24,8 @@ data class Position(val x: Int, val y: Int) {
     return x >= 0 && y >= 0 && x <= bottomRight.x && y <= bottomRight.y
   }
 
-  fun <T> inGrid(grid: List<List<T>>): Boolean {
-    return inGrid(Position(grid[0].indices.count(), grid.indices.count()))
+  fun <T> inGrid(grid: Grid<T>): Boolean {
+    return inGrid(Position(grid[0].indices.count() - 1, grid.indices.count() - 1))
   }
 
   fun euclideanDistance(other: Position): Int {
@@ -46,11 +48,31 @@ data class Position(val x: Int, val y: Int) {
     return Position(this.x / scalar, this.y / scalar)
   }
 
+  override fun toString(): String {
+    return "${x},${y}"
+  }
 
-  fun <T> get(grid: List<List<T>>): T {
+
+  fun <T> get(grid: Grid<T>): T {
     return grid[y][x]
   }
 }
+
+fun <T> displayGrid(grid: Grid<T>, display: (node: T) -> String) {
+  println("")
+  println("")
+  for (y in grid.indices) {
+    for (x in grid[y].indices) {
+      val position = Position(x, y)
+      print(display(position.get(grid)))
+    }
+    println("")
+  }
+
+  println("")
+  println("")
+}
+
 
 class Content(private val day: Int) {
 
