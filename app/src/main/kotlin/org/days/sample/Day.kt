@@ -9,21 +9,12 @@ import org.days.IDay
 
 class Day : IDay {
   override fun partOne(input: String): String {
-    val result = DayGrammar().parseToEnd(input)
-
-    return result
-      .map { it.filterIsInstance<Number>() }
-      .map { it.first().value.toString() + it.last().value.toString() }
-      .sumOf {
-        it.toInt()
-      }.toString()
-
+    return input
   }
 
   override fun partTwo(input: String): String {
     return input
   }
-
 
   interface Item
   class Number(val value: Int) : Item
