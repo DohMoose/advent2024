@@ -18,8 +18,17 @@ val eastIndex = 1
 val southIndex = 2
 val westIndex = 3
 val directionIndexes = listOf(northIndex, eastIndex, southIndex, westIndex)
+val north = directions[northIndex]
+val east = directions[eastIndex]
+val south = directions[southIndex]
+val west = directions[westIndex]
 
 data class Position(val x: Int, val y: Int) {
+  val neighbours: List<Position>
+    get() {
+      return directions.map { it + this }
+    }
+
   fun inGrid(bottomRight: Position): Boolean {
     return x >= 0 && y >= 0 && x <= bottomRight.x && y <= bottomRight.y
   }
